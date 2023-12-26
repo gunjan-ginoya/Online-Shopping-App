@@ -181,7 +181,7 @@ class AddProduct extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.black,
-                        ),
+                        ), 
                       ),
                       child: _imagepath.value.isEmpty
                           ? Column(

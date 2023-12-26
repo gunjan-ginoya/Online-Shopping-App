@@ -124,6 +124,7 @@ class LoginPage extends StatelessWidget {
                     print("pass: ${userData["userData"][0]["password"] }");
                     if(userData["userData"][0]["password"] == _controllerPassword.text){
                       GetXClass.prefs?.setBool("isLogin", true);
+                      GetXClass.prefs?.setString("userid", userData["userData"][0]["id"] );
                       Get.offAll(Homepage());
                     }else{
                       GetXClass.isValidPasswordLogin.value = false;

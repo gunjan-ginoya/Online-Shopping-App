@@ -7,6 +7,8 @@ import '../model/product.dart';
 import 'add_product.dart';
 import 'package:http/http.dart' as http;
 
+import 'product_details.dart';
+
 class BuyProducts extends StatelessWidget {
   const BuyProducts({Key? key}) : super(key: key);
 
@@ -62,11 +64,11 @@ class BuyProducts extends StatelessWidget {
                         padding: const EdgeInsets.all(10.0),
                         child: GestureDetector(
                           onTap: () {
-                            // Get.to(product_details(
-                            //     name: product.name,
-                            //     price: product.price,
-                            //     des: product.decription,
-                            //     image: product.image));
+                            Get.to(product_details(
+                                name: product.name,
+                                price: product.price,
+                                des: product.decription,
+                                image: product.image));
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
