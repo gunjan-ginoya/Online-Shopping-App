@@ -13,8 +13,8 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> _pages = [
       BuyProducts(),
-      Profilepage(),
       CartPage(),
+      Profilepage(),
     ];
     RxInt _selectedIndex = 0.obs;
     return Scaffold(

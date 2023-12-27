@@ -144,35 +144,35 @@ class AddProduct extends StatelessWidget {
                   await picker.pickImage(source: ImageSource.gallery);
                   _imagepath.value = image!.path;
 
-                  CroppedFile? croppedFile = await ImageCropper().cropImage(
-                    sourcePath: _imagepath.value,
-                    aspectRatioPresets: [
-                      CropAspectRatioPreset.square,
-                      CropAspectRatioPreset.ratio3x2,
-                      CropAspectRatioPreset.original,
-                      CropAspectRatioPreset.ratio4x3,
-                      CropAspectRatioPreset.ratio16x9
-                    ],
-                    uiSettings: [
-                      AndroidUiSettings(
-                          toolbarTitle: 'Cropper',
-                          toolbarColor: Colors.deepOrange,
-                          toolbarWidgetColor: Colors.white,
-                          initAspectRatio: CropAspectRatioPreset.original,
-                          lockAspectRatio: false),
-                      IOSUiSettings(
-                        title: 'Cropper',
-                      ),
-                      WebUiSettings(
-                        context: context,
-                      ),
-                    ],
-                  ).then((value) async {
-                    if (value != null) {
-                      _imagepath.value = value.path;
-                    }
-                    return null;
-                  });
+                  // CroppedFile? croppedFile = await ImageCropper().cropImage(
+                  //   sourcePath: _imagepath.value,
+                  //   aspectRatioPresets: [
+                  //     CropAspectRatioPreset.square,
+                  //     CropAspectRatioPreset.ratio3x2,
+                  //     CropAspectRatioPreset.original,
+                  //     CropAspectRatioPreset.ratio4x3,
+                  //     CropAspectRatioPreset.ratio16x9
+                  //   ],
+                  //   uiSettings: [
+                  //     AndroidUiSettings(
+                  //         toolbarTitle: 'Cropper',
+                  //         toolbarColor: Colors.deepOrange,
+                  //         toolbarWidgetColor: Colors.white,
+                  //         initAspectRatio: CropAspectRatioPreset.original,
+                  //         lockAspectRatio: false),
+                  //     IOSUiSettings(
+                  //       title: 'Cropper',
+                  //     ),
+                  //     WebUiSettings(
+                  //       context: context,
+                  //     ),
+                  //   ],
+                  // ).then((value) async {
+                  //   if (value != null) {
+                  //     _imagepath.value = value.path;
+                  //   }
+                  //   return null;
+                  // });
                 },
                 child: Obx(
                       () => Container(

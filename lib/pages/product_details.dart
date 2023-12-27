@@ -108,12 +108,13 @@ class product_details extends StatelessWidget {
                         "product_price": price,
                         "user_id": uid,
                         "product_image": image,
-                        "quantity": '1'
+                        "quantity ": '1'
                       };
                       isloading.value = true;
                       var url = Uri.parse(
                           'https://gunjanecommapp.000webhostapp.com/add_to_cart.php');
                       var response = await http.post(url, body: map);
+                      print("!!ADD TO CART!! ${response.body}");
                       isloading.value = false;
 
                       Get.to(CartPage());
