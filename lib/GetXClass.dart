@@ -3,8 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GetXClass extends GetxController {
   static SharedPreferences? prefs;
-  static RegExp emailRegexp = RegExp(
-      "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$");
 
   // register page
   static RxString gender = "Male".obs;
