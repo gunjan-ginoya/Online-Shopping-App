@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,4 +27,25 @@ class GetXClass extends GetxController {
   }
 
   static RxList allContacts = [].obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    checkConnection();
+  }
+
+  Future<void> checkConnection() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult != ConnectivityResult.wifi &&
+        connectivityResult != ConnectivityResult.mobile) {
+      Get.defaultDialog(title: "Check your internet connection");
+    }
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result != ConnectivityResult.mobile &&
+          result != ConnectivityResult.wifi) {
+        Get.defaultDialog(title: "Check your internet connection");
+      }
+    });
+  }
 }

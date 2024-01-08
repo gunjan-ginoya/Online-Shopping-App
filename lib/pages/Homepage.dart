@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:online_shopping_app/pages/cart_page.dart';
+import 'package:online_shopping_app/pages/cart/cart_page.dart';
 
 import 'buy_page.dart';
-import 'profile_page.dart';
+import 'profile/profile_page.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({Key? key}) : super(key: key);

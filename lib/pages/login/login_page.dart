@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../widgets/no_account_text.dart';
+import '../register/register_page.dart';
 import 'component/sign_up_form.dart';
 
 class LoginPage extends StatelessWidget {
@@ -39,9 +40,24 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   const SignForm(),
                   const SizedBox(height: 16),
-
                   const SizedBox(height: 20),
-                  const NoAccountText(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don’t have an account? ",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      GestureDetector(
+                        onTap: () => Get.offAll(RegisterPage()),
+                        child: const Text(
+                          "Sign Up",
+                          style:
+                              TextStyle(fontSize: 16, color: Color(0xFFFF7643)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -50,7 +66,4 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
 }
-
-

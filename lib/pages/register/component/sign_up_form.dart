@@ -1,8 +1,16 @@
+import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:online_shopping_app/pages/login/login_page.dart';
+import '../../../GetXClass.dart';
 import '../../../constants.dart';
 import '../../../widgets/custome_suffix_icon.dart';
 import '../../../widgets/form_error.dart';
+import '../../Homepage.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -17,18 +25,20 @@ class _SignUpFormState extends State<SignUpForm> {
   String? password;
   String? username;
   String? conform_password;
+  RxString _imagepath = "".obs;
   bool remember = false;
+  RxBool isLoading = false.obs;
   final RxList errors = [].obs;
 
   void addError({String? error}) {
     if (!errors.contains(error)) {
-        errors.add(error);
+      errors.add(error);
     }
   }
 
   void removeError({String? error}) {
     if (errors.contains(error)) {
-        errors.remove(error);
+      errors.remove(error);
     }
   }
 
@@ -38,6 +48,50 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
+          // Profile Image
+          Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              Obx(
+                () => Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade400,
+                    shape: BoxShape.circle,
+                    image: _imagepath.value.isEmpty
+                        ? DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('images/default_image.jpg'),
+                          )
+                        : DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(
+                              File("${_imagepath.value}"),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 5,
+                bottom: 0,
+                child: IconButton(
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    final XFile? image =
+                        await picker.pickImage(source: ImageSource.gallery);
+                    _imagepath.value = image!.path;
+                  },
+                  icon: const Icon(
+                    Icons.add_a_photo,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 30),
           // Username
           TextFormField(
             keyboardType: TextInputType.emailAddress,
@@ -52,7 +106,7 @@ class _SignUpFormState extends State<SignUpForm> {
               if (value!.isEmpty) {
                 addError(error: "Please Enter Your Username");
                 return "";
-              } 
+              }
               return null;
             },
             decoration: const InputDecoration(
@@ -64,7 +118,7 @@ class _SignUpFormState extends State<SignUpForm> {
               suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/user.svg"),
             ),
           ),
-          const SizedBox(height: 20),          
+          const SizedBox(height: 20),
           // Email
           TextFormField(
             keyboardType: TextInputType.emailAddress,
@@ -160,58 +214,55 @@ class _SignUpFormState extends State<SignUpForm> {
               suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
             ),
           ),
-          Obx(()=> FormError(errors: errors.value)),
+          Obx(() => FormError(errors: errors.value)),
           const SizedBox(height: 20),
           // if all are valid then go to success screen
-          ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
+          Obx(
+            () => ElevatedButton(
+              onPressed: () async {
+                isLoading.value = true;
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
 
-                // TODO: Register User
+                  // TODO: Register User
 
-                //             GetXClass.isValidUsername.value =
-                //                 _controllerUsername.text.isNotEmpty;
-                //             GetXClass.isValidEmial.value =
-                //                 _controllerEmail.text.isNotEmpty &&
-                //                     GetXClass.emailRegexp.hasMatch(_controllerEmail.text);
-                //             GetXClass.isValidPassword.value = _controllerPassword
-                //                     .text.isNotEmpty &&
-                //                 _controllerConFirmPassword.text == _controllerPassword.text;
-                //             GetXClass.isValidRePassword.value = _controllerPassword
-                //                     .text.isNotEmpty &&
-                //                 _controllerConFirmPassword.text == _controllerPassword.text;
-                //
-                //             if (GetXClass.isValidUsername.value &&
-                //                 GetXClass.isValidEmial.value &&
-                //                 GetXClass.isValidPassword.value &&
-                //                 GetXClass.isValidRePassword.value) {
-                //               String image = "";
-                //               String imageName = "";
-                //
-                //               if (_imagepath.value.isNotEmpty) {
-                //                 image = base64Encode(
-                //                     (await File(_imagepath.value).readAsBytes()));
-                //                 imageName = "img${DateTime.now().second}${DateTime.now()}";
-                //               }
-                //
-                //               Map body = {
-                //                 "name": _controllerUsername.text,
-                //                 "email": _controllerEmail.text,
-                //                 "password": _controllerPassword.text,
-                //                 "image": image,
-                //                 "imageName": imageName
-                //               };
-                //
-                //               var url = Uri.parse(
-                //                   'https://gunjanecommapp.000webhostapp.com/register.php');
-                //               var response = await http.post(url, body: body);
-                //               GetXClass.prefs?.setBool("isLogin", true);
-                //               Get.offAll(Homepage());
+                  String image = "";
+                  String imageName = "";
 
-              }
-            },
-            child: const Text("Continue"),
+                  if (_imagepath.value.isNotEmpty) {
+                    image = base64Encode(
+                        (await File(_imagepath.value).readAsBytes()));
+                    imageName = "img${DateTime.now().second}${DateTime.now()}";
+                  }
+                  Map body = {
+                    "name": username!.trim(),
+                    "email": email!.trim(),
+                    "password": password!.trim(),
+                    "image": image,
+                    "imageName": imageName
+                  };
+
+                  var url = Uri.parse(
+                      'https://gunjanecommapp.000webhostapp.com/register.php');
+
+                  var response = await http.post(url, body: body);
+                  GetXClass.prefs?.setBool("isLogin", true);
+                  Get.offAll(LoginPage());
+                }
+                isLoading.value = false;
+              },
+              child: isLoading.value
+                  ? Center(
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Text("Continue"),
+            ),
           ),
         ],
       ),

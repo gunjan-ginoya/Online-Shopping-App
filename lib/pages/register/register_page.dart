@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_shopping_app/pages/login/login_page.dart';
 import '../../constants.dart';
 import 'component/sign_up_form.dart';
 
@@ -29,6 +30,23 @@ class RegisterPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   const SignUpForm(),
                   const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Already have an account? ",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      GestureDetector(
+                        onTap: () => Get.offAll(LoginPage()),
+                        child: const Text(
+                          "Sign In",
+                          style:
+                              TextStyle(fontSize: 16, color: Color(0xFFFF7643)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
